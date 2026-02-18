@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
 /*
@@ -103,13 +104,11 @@ func CreateSamples(posFile string, bgFile string, num int, createSampleCmdOption
 	cmdArgs := []string{
 		"-img", posFile,
 		"-bg", bgFile,
-		//	"-info", "info/info.lst",
 		"-w", "70",
 		"-h", "70",
-		createSampleCmdOptions,
-		"-vec", "positives.vec",
-		"-num", strconv.Itoa(num),
 	}
+	cmdArgs = append(cmdArgs, strings.Fields(createSampleCmdOptions)...)
+	cmdArgs = append(cmdArgs, "-vec", "positives.vec", "-num", strconv.Itoa(num))
 	fmt.Println(cmdName, cmdArgs)
 	_, err = exec.Command(cmdName, cmdArgs...).CombinedOutput()
 	if err != nil {
